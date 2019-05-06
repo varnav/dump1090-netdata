@@ -34,22 +34,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import json
 from bases.FrameworkServices.UrlService import UrlService
 
-update_every = 1
+update_every = 55
 priority = 60000
 retries = 10
 
 ORDER = [
-    'signals',
+    'messages',
+    'signals'
 ]
 
 CHARTS = {
     'signals': {
-        'options': [None, 'Signals', 'dB', 'statistics', 'apache.bytesperreq', 'line'],
+        'options': [None, 'Signals last 1m', 'dB', 'signals', '', 'line'],
         'lines': [
             ['signal', 'power', 'absolute', 1, 10],
-            ['noise', 'power', 'absolute', 1, 10]
+            ['noise', 'noise', 'absolute', 1, 10],
+            ['peak_signal', 'peak_signal', 'absolute', 1, 10],
+            ['strong_signals', 'strong_signals', 'absolute', 1, 10]
+]},
+
+    'messages': {
+        'options': [None, 'Messages last 1m', 'num', 'messages', '', 'line'],
+        'lines': [
+            ['messages', 'number', 'absolute']
 ]}
+
 }
+
+
 
 
 class Service(UrlService):
@@ -57,8 +69,8 @@ class Service(UrlService):
         UrlService.__init__(self, configuration=configuration, name=name)
         self.order = ORDER
         self.definitions = CHARTS
-        #self.url1090 = self.configuration.get('url', 'http://localhost:8080/data/stats.json')
-        self.url1090 = 'http://localhost:8080/data/stats.json'
+        self.url1090 = self.configuration.get('url', 'http://localhost:8080/data/stats.json')
+        #self.url1090 = 'http://localhost:8080/data/stats.json'
 
     def _get_data(self):
         """
@@ -67,25 +79,36 @@ class Service(UrlService):
         """
         raw_data = self._get_raw_data()
 
+        data = dict()
+
         if not raw_data:
             return None
 
-        data = dict()
-
-        data["signal"] = parse_line_local_float('signal', raw_data)
-        data["noise"] = parse_line_local_float('noise', raw_data)
+        data["signal"] = parse('last1min','local','signal', raw_data, 1)
+        data["noise"] = parse('last1min','local','noise', raw_data, 1)
+        data["peak_signal"] = parse('last1min','local','peak_signal', raw_data, 1)
+        data["strong_signals"] = parse('last1min','local','strong_signals', raw_data, 1)
+        data["messages"] = parse('last1min','messages', 0, raw_data, 1)
 
         return data or None
 
-def parse_line_local_float(label, line):
+def parse(l1, l2, l3, rawjson, fl=bool):
     
-        #stats = json.load(urlopen(url1090, None, 5.0))
-        stats = json.loads(line)
+    stats = json.loads(rawjson)
 
-        if stats['last1min'].has_key('local'):
-            if stats['last1min']['local'].has_key(label):
-                raw = stats['last1min']['local'][label]
-                # The current netdata API supports only integers, so multiply your float number by 100 or 1000 and set the divider of the dimension to the same number.
-                data = raw*10
-        return data
+    res = float()
+
+    if stats[l1].has_key(l2):
+        if (l3 == 0): 
+            raw = stats[l1][l2]
+        elif stats[l1][l2].has_key(l3):
+            raw = stats[l1][l2][l3]
+            # The current netdata API supports only integers, so multiply your float number by 100 or 1000 and set the divider of the dimension to the same number.
+            #print(raw, type(raw))
+        if fl: 
+            res = raw*10
+        else:
+            res = raw
+
+        return res
 
