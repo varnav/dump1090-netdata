@@ -12,3 +12,5 @@ sudo cp dump1090-netdata/dump1090.chart.py /usr/libexec/netdata/python.d/
 sudo cp dump1090-netdata/dump1090.conf /etc/netdata/python.d/
 systemctl restart netdata
 ```
+
+[Netdata website](https://my-netdata.io/)
