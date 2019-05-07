@@ -52,19 +52,19 @@ CHARTS = {
             ['signal', 'power', 'absolute', 1, 10],
             ['noise', 'noise', 'absolute', 1, 10],
             ['peak_signal', 'peak_signal', 'absolute', 1, 10],
-]},
+        ]},
 
     'strong_signals': {
         'options': [None, 'Strong signals last 1m', 'N', 'signals', 'signals', 'line'],
         'lines': [
             ['strong_signals', 'strong_signals', 'absolute']
-]},
+        ]},
 
     'messages': {
         'options': [None, 'Messages last 1m', 'N', 'messages', 'messages', 'area'],
         'lines': [
             ['messages', 'messages', 'absolute']
-]},
+        ]},
 
     'samples': {
         'options': [None, 'Samples last 1m', 'N', 'samples', 'samples', 'area'],
@@ -73,11 +73,9 @@ CHARTS = {
             ['samples_dropped', 'Dropped', 'absolute'],
             ['modeac', 'Mode A/C', 'absolute'],
             ['modes', 'Mode S', 'absolute'],
-]}
+        ]}
 
 }
-
-
 
 
 class Service(UrlService):
@@ -86,17 +84,6 @@ class Service(UrlService):
         self.order = ORDER
         self.definitions = CHARTS
         self.url1090 = self.configuration.get('url', 'http://localhost:8080/data/stats.json')
-        #self.url1090 = 'http://localhost:8080/data/stats.json'
-
-    def check(self):
-        self._manager = self._build_manager()
-
-        data = self._get_data()
-
-        if not data:
-            return None
-
-        return True
 
     def _get_data(self):
         """
@@ -110,34 +97,33 @@ class Service(UrlService):
         if not raw_data:
             return None
 
-        data["signal"] = parse('last1min','local','signal', raw_data, 1)
-        data["noise"] = parse('last1min','local','noise', raw_data, 1)
-        data["peak_signal"] = parse('last1min','local','peak_signal', raw_data, 1)
-        data["strong_signals"] = parse('last1min','local','strong_signals', raw_data, 0)
-        data["messages"] = parse('last1min','messages', 0, raw_data, 0)
-        data["samples_processed"] = parse('last1min', 'local', 'samples_processed', raw_data, 0)
-        data["samples_dropped"] = parse('last1min', 'local', 'samples_dropped', raw_data, 0)
-        data["modeac"] = parse('last1min', 'local', 'modeac', raw_data, 0)
-        data["modes"] = parse('last1min', 'local', 'modes', raw_data, 0)
+        data["signal"] = parse('last1min', 'local', 'signal', raw_data, True)
+        data["noise"] = parse('last1min', 'local', 'noise', raw_data, True)
+        data["peak_signal"] = parse('last1min', 'local', 'peak_signal', raw_data, True)
+        data["strong_signals"] = parse('last1min', 'local', 'strong_signals', raw_data, False)
+        data["messages"] = parse('last1min', 'messages', 0, raw_data, False)
+        data["samples_processed"] = parse('last1min', 'local', 'samples_processed', raw_data, False)
+        data["samples_dropped"] = parse('last1min', 'local', 'samples_dropped', raw_data, False)
+        data["modeac"] = parse('last1min', 'local', 'modeac', raw_data, False)
+        data["modes"] = parse('last1min', 'local', 'modes', raw_data, False)
 
         return data or None
 
-def parse(l1, l2, l3, rawjson, fl=bool):
-    
+
+def parse(l1, l2, l3, rawjson, fl):
     stats = json.loads(rawjson)
 
     raw = float()
-    res = int()
 
-    if stats[l1].has_key(l2):
-        if (l3 == 0):
+    if l2 in stats[l1]:
+        if l3 == 0:
             raw = stats[l1][l2]
-        elif stats[l1][l2].has_key(l3):
+        elif l3 in stats[l1][l2]:
             raw = stats[l1][l2][l3]
-            # The current netdata API supports only integers, so multiply your float number by 100 or 1000 and set the divider of the dimension to the same number.
-            #print(raw, type(raw))
+            # The current netdata API supports only integers, so multiply your float number by 100 or 1000 and set
+            # the divider of the dimension to the same number.
         if fl:
-            res = raw*10
+            res = raw * 10
         else:
             res = raw
 
