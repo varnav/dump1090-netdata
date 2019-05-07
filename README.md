@@ -1,4 +1,5 @@
 # Netdata plugin for dump1090-fa
+[![Build Status](https://travis-ci.org/varnav/dump1090-netdata.svg?branch=devel)](https://travis-ci.org/varnav/dump1090-netdata)
 
 ## Installation
 
