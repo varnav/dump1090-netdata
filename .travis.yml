@@ -1,0 +1,10 @@
+language: python
+
+install:
+  - pip install pylint
+
+before_script:
+  - pylint --version
+
+script:
+  - pylint dump1090.chart.py
