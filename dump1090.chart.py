@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 """
 The MIT License (MIT)
@@ -130,13 +130,13 @@ def parse(l1, l2, l3, rawjson, fl=bool):
     res = int()
 
     if stats[l1].has_key(l2):
-        if (l3 == 0): 
+        if (l3 == 0):
             raw = stats[l1][l2]
         elif stats[l1][l2].has_key(l3):
             raw = stats[l1][l2][l3]
             # The current netdata API supports only integers, so multiply your float number by 100 or 1000 and set the divider of the dimension to the same number.
             #print(raw, type(raw))
-        if fl: 
+        if fl:
             res = raw*10
         else:
             res = raw
