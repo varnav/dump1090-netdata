@@ -141,4 +141,4 @@ def parse(l1, l2, l3, rawjson, fl):
         else:
             res = raw
 
-        return res
+        return res or None
