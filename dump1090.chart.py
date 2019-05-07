@@ -136,9 +136,10 @@ def parse(l1, l2, l3, rawjson, fl):
             raw = stats[l1][l2][l3]
             # The current netdata API supports only integers, so multiply your float number by
             # 100 or 1000 and set the divider of the dimension to the same number.
-        if fl:
-            res = raw * 10
-        else:
-            res = raw
+        
+    if fl:
+        res = raw * 10
+    else:
+        res = raw
 
-        return res or None
+    return res or None
