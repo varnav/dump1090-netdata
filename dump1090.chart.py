@@ -34,9 +34,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import json
 from bases.FrameworkServices.UrlService import UrlService
 
-update_every = 20
-priority = 60000
-retries = 10
+UPDATE_EVERY = 20
+PRIORITY = 60000
+RETRIES = 10
 
 ORDER = [
     'messages',
@@ -101,7 +101,7 @@ class Service(UrlService):
         data["noise"] = parse('last1min', 'local', 'noise', raw_data, True)
         data["peak_signal"] = parse('last1min', 'local', 'peak_signal', raw_data, True)
         data["strong_signals"] = parse('last1min', 'local', 'strong_signals', raw_data, False)
-        data["messages"] = parse('last1min', 'messages', 0, raw_data, False)
+        data["messages"] = parse('last1min', 'messages', '', raw_data, False)
         data["samples_processed"] = parse('last1min', 'local', 'samples_processed', raw_data, False)
         data["samples_dropped"] = parse('last1min', 'local', 'samples_dropped', raw_data, False)
         data["modeac"] = parse('last1min', 'local', 'modeac', raw_data, False)
@@ -111,17 +111,31 @@ class Service(UrlService):
 
 
 def parse(l1, l2, l3, rawjson, fl):
+    """Parse JSON stats from dump1090
+
+    Args:
+        l1 (str): Level 1 name of JSON tree
+        l2 (str): Level 2 name of JSON tree
+        l3 (str): Level 3 name of JSON tree
+        rawjson (str): JSON to parse
+        param2 (bool): Is this a float type data?
+
+    Returns:
+        int: Value of given stat
+
+    """
+
     stats = json.loads(rawjson)
 
     raw = float()
 
     if l2 in stats[l1]:
-        if l3 == 0:
+        if not l3:
             raw = stats[l1][l2]
         elif l3 in stats[l1][l2]:
             raw = stats[l1][l2][l3]
-            # The current netdata API supports only integers, so multiply your float number by 100 or 1000 and set
-            # the divider of the dimension to the same number.
+            # The current netdata API supports only integers, so multiply your float number by
+            # 100 or 1000 and set the divider of the dimension to the same number.
         if fl:
             res = raw * 10
         else:

@@ -1,10 +1,10 @@
 language: python
 
 install:
-  - pip install pylint
+  - pip install pylint netdata
 
 before_script:
   - pylint --version
 
 script:
-  - pylint dump1090.chart.py
+  - pylint  --variable-naming-style=any --disable=too-few-public-methods, missing-docstring dump1090.chart.py
