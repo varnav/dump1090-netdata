@@ -31,7 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import json
-from bases.FrameworkServices.UrlService import UrlService
+from bases.FrameworkServices.UrlService import UrlService # pylint: disable=E0401, E0611
 
 UPDATE_EVERY = 20
 PRIORITY = 60000
