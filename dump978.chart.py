@@ -101,6 +101,8 @@ def parse(l1, l2, l3, stats):
 
     """
 
+    raw = int()
+
     if l2 in stats[l1]:
         if not l3:
             raw = stats[l1][l2]
