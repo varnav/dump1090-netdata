@@ -16,15 +16,15 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# @Title            : dump1090.chart
-# @Description      : NetData plugin for dump1090
+# @Title            : dump978.chart
+# @Description      : NetData plugin for dump978
 # @Author           : Evgeny Varnavskiy
 # @Email            : varnavruz@gmail.com
 # @Copyright        : Evgeny Varnavskiy
 # @License          : MIT
 # @Maintainer       : Evgeny Varnavskiy
-# @Date             : 2019/05/06
-# @Version          : 0.2
+# @Date             : 2019/05/08
+# @Version          : 0.1
 # @Notes            : With default NetData installation put this file under
 #                   : /usr/libexec/netdata/python.d/ and the config file under
 #                   : /etc/netdata/python.d/
@@ -38,40 +38,14 @@ PRIORITY = 60000
 RETRIES = 10
 
 ORDER = [
-    'messages',
-    'signals',
-    'strong_signals',
-    'samples'
+    'messages'
 ]
 
 CHARTS = {
-    'signals': {
-        'options': [None, 'Signals last 1m', 'dB', 'signals', 'signals', 'line'],
-        'lines': [
-            ['signal', 'power', 'absolute', 1, 10],
-            ['noise', 'noise', 'absolute', 1, 10],
-            ['peak_signal', 'peak_signal', 'absolute', 1, 10],
-        ]},
-
-    'strong_signals': {
-        'options': [None, 'Strong signals last 1m', 'N', 'signals', 'signals', 'line'],
-        'lines': [
-            ['strong_signals', 'strong_signals', 'absolute']
-        ]},
-
     'messages': {
-        'options': [None, 'Messages last 1m', 'N', 'messages', 'messages', 'area'],
+        'options': [None, 'Messages total', 'N', 'messages', 'messages', 'area'],
         'lines': [
             ['messages', 'messages', 'absolute']
-        ]},
-
-    'samples': {
-        'options': [None, 'Samples last 1m', 'N', 'samples', 'samples', 'area'],
-        'lines': [
-            ['samples_processed', 'Processed', 'absolute'],
-            ['samples_dropped', 'Dropped', 'absolute'],
-            ['modeac', 'Mode A/C', 'absolute'],
-            ['modes', 'Mode S', 'absolute'],
         ]}
 
 }
@@ -82,7 +56,7 @@ class Service(UrlService):
         UrlService.__init__(self, configuration=configuration, name=name)
         self.order = ORDER
         self.definitions = CHARTS
-        self.url = self.configuration.get('url', 'http://localhost:8080/data/stats.json')
+        self.url = self.configuration.get('url', 'http://localhost:8978/data/stats.json')
 
     def _get_data(self):
         """
@@ -100,21 +74,13 @@ class Service(UrlService):
 
         # We multiple float values by 10 there and set delimeter to 10 in charts definition
         # It's the only way to get float values in Netdata for now
-        data["signal"] = parse('last1min', 'local', 'signal', stats)*10
-        data["noise"] = parse('last1min', 'local', 'noise', stats)*10
-        data["peak_signal"] = parse('last1min', 'local', 'peak_signal', stats)*10
-        data["strong_signals"] = parse('last1min', 'local', 'strong_signals', stats)
         data["messages"] = parse('last1min', 'messages', '', stats)
-        data["samples_processed"] = parse('last1min', 'local', 'samples_processed', stats)
-        data["samples_dropped"] = parse('last1min', 'local', 'samples_dropped', stats)
-        data["modeac"] = parse('last1min', 'local', 'modeac', stats)
-        data["modes"] = parse('last1min', 'local', 'modes', stats)
 
         return data or None
 
 
 def parse(l1, l2, l3, stats):
-    """Parse JSON stats from dump1090
+    """Parse JSON stats from dump978
 
     Args:
         l1 (str): Level 1 name of JSON tree
