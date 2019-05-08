@@ -1,4 +1,3 @@
-
 # Netdata plugin for dump1090-fa
 
 [![Build Status](https://travis-ci.org/varnav/dump1090-netdata.svg?branch=devel)](https://travis-ci.org/varnav/dump1090-netdata) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f62e5dde93e04d02a100d69ef9d9ca3a)](https://www.codacy.com/app/varnav/dump1090-netdata?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=varnav/dump1090-netdata&amp;utm_campaign=Badge_Grade)
