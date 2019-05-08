@@ -3,7 +3,7 @@
 
 ## Installation
 
-Copy to `dump1090.chart.py` to `/usr/libexec/netdata/python.d/` and `dump1090.conf` to `/etc/netdata/python.d/`. Restart netdata `sudo systemctl restart netdata`.
+Copy `dump1090.chart.py` to `/usr/libexec/netdata/python.d/` and `dump1090.conf` to `/etc/netdata/python.d/`. Restart netdata `sudo systemctl restart netdata`.
 
 In short:
 
@@ -11,6 +11,8 @@ In short:
 git clone --depth 1 --branch devel https://github.com/varnav/dump1090-netdata.git
 sudo cp dump1090-netdata/dump1090.chart.py /usr/libexec/netdata/python.d/
 sudo cp dump1090-netdata/dump1090.conf /etc/netdata/python.d/
+sudo cp dump1090-netdata/dump978.chart.py /usr/libexec/netdata/python.d/
+sudo cp dump1090-netdata/dump978.conf /etc/netdata/python.d/
 sudo systemctl restart netdata
 ```
 
