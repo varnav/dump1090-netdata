@@ -113,7 +113,7 @@ class Service(UrlService):
         return data or None
 
 
-def parse(l1, l2, l3, stats):
+def parse(l1: str, l2: str, l3: str, stats: str):
     """Parse JSON stats from dump1090
 
     Args:
@@ -124,8 +124,9 @@ def parse(l1, l2, l3, stats):
  
     Returns:
         int: Value of given stat
-
     """
+
+    raw = int()
 
     if l2 in stats[l1]:
         if not l3:
