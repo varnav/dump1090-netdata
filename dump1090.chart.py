@@ -113,7 +113,7 @@ class Service(UrlService):
         return data or None
 
 
-def parse(l1: str, l2: str, l3: str, stats: str):
+def parse(l1, l2, l3, stats):
     """Parse JSON stats from dump1090
 
     Args:
