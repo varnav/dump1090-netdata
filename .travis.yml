@@ -8,4 +8,4 @@ before_script:
   - pylint --version
 
 script:
-  - pylint  --variable-naming-style=any --argument-naming-style=any --disable=too-few-public-methods,C0111 dump1090.chart.py
+  - pylint  --variable-naming-style=any --argument-naming-style=any --disable=too-few-public-methods,C0111 dump*.chart.py

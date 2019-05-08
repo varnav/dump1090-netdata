@@ -87,7 +87,7 @@ def parse(l1, l2, l3, stats):
         l2 (str): Level 2 name of JSON tree
         l3 (str): Level 3 name of JSON tree
         stats (str): JSON to parse
- 
+
     Returns:
         int: Value of given stat
 
