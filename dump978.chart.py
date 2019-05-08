@@ -50,10 +50,10 @@ CHARTS = {
         ]},
 
     'aircraft': {
-        'options': [None, 'Aircraft tracked now', 'N', 'messages', 'messages', 'area'],
+        'options': [None, 'Aircraft tracked now', 'N', 'aircraft', 'aircraft', 'area'],
         'lines': [
             ['tracked_now', 'N', 'absolute']
-        ]},       
+        ]}   
 
 }
 
