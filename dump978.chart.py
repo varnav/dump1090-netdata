@@ -33,12 +33,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import json
 from bases.FrameworkServices.UrlService import UrlService # pylint: disable=E0401, E0611
 
-UPDATE_EVERY = 20
+UPDATE_EVERY = 10
 PRIORITY = 60000
 RETRIES = 10
 
 ORDER = [
-    'messages'
+    'messages',
+    'aircraft'
 ]
 
 CHARTS = {
@@ -46,7 +47,13 @@ CHARTS = {
         'options': [None, 'Messages total', 'N', 'messages', 'messages', 'area'],
         'lines': [
             ['messages', 'messages', 'absolute']
-        ]}
+        ]},
+
+    'aircraft': {
+        'options': [None, 'Aircraft tracked now', 'N', 'messages', 'messages', 'area'],
+        'lines': [
+            ['tracked_now', 'N', 'absolute']
+        ]},       
 
 }
 
@@ -74,7 +81,8 @@ class Service(UrlService):
 
         # We multiple float values by 10 there and set delimeter to 10 in charts definition
         # It's the only way to get float values in Netdata for now
-        data["messages"] = parse('last1min', 'messages', '', stats)
+        data["messages"] = parse('aircraft', 'messages', '', stats)
+        data["tracked_now"] = len(stats['aircraft'])
 
         return data or None
 
