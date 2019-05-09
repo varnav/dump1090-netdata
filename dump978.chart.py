@@ -43,16 +43,16 @@ ORDER = [
 ]
 
 CHARTS = {
-    'messages': {
-        'options': [None, 'Messages total', 'N', 'messages', 'messages', 'area'],
-        'lines': [
-            ['messages', 'messages', 'absolute']
-        ]},
-
     'aircraft': {
         'options': [None, 'Aircraft tracked now', 'N', 'aircraft', 'aircraft', 'area'],
         'lines': [
             ['tracked_now', 'N', 'absolute']
+        ]},
+
+    'messages': {
+        'options': [None, 'Messages last 1m', 'N', 'messages', 'messages', 'area'],
+        'lines': [
+            ['messages', 'messages', 'absolute']
         ]}
 
 }
@@ -81,7 +81,7 @@ class Service(UrlService):
 
         # We multiple float values by 10 there and set delimeter to 10 in charts definition
         # It's the only way to get float values in Netdata for now
-        data["messages"] = parse('aircraft', 'messages', '', stats)
+        data["messages978"] = parse('aircraft', 'messages', None, stats)
         data["tracked_now"] = len(stats['aircraft'])
 
         return data or None
@@ -104,7 +104,7 @@ def parse(l1, l2, l3, stats):
     raw = int()
 
     if l2 in stats[l1]:
-        if not l3:
+        if l3 is None:
             raw = stats[l1][l2]
         elif l3 in stats[l1][l2]:
             raw = stats[l1][l2][l3]

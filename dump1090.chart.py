@@ -104,7 +104,7 @@ class Service(UrlService):
         data["noise"] = parse('last1min', 'local', 'noise', stats)*10
         data["peak_signal"] = parse('last1min', 'local', 'peak_signal', stats)*10
         data["strong_signals"] = parse('last1min', 'local', 'strong_signals', stats)
-        data["messages"] = parse('last1min', 'messages', '', stats)
+        data["messages"] = parse('last1min', 'messages', None, stats)
         data["samples_processed"] = parse('last1min', 'local', 'samples_processed', stats)
         data["samples_dropped"] = parse('last1min', 'local', 'samples_dropped', stats)
         data["modeac"] = parse('last1min', 'local', 'modeac', stats)
@@ -129,7 +129,7 @@ def parse(l1, l2, l3, stats):
     raw = int()
 
     if l2 in stats[l1]:
-        if not l3:
+        if l3 is None:
             raw = stats[l1][l2]
         elif l3 in stats[l1][l2]:
             raw = stats[l1][l2][l3]
