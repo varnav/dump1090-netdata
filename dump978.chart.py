@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 The MIT License (MIT)
@@ -53,7 +53,7 @@ CHARTS = {
         'options': [None, 'Aircraft tracked now', 'N', 'aircraft', 'aircraft', 'area'],
         'lines': [
             ['tracked_now', 'N', 'absolute']
-        ]}   
+        ]}
 
 }
 
