@@ -6,7 +6,7 @@ python:
 cache: pip
 
 install:
-  - pip install pylint netdata
+  - pip install pylint
 
 before_script:
   - pylint --version
